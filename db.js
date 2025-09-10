@@ -1,4 +1,3 @@
-// db.js
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("./woundtech_solution.db");
 
@@ -23,7 +22,7 @@ db.serialize(() => {
     )
   `);
 
-  // Visits table with status column
+  // Visits table
   db.run(`
     CREATE TABLE IF NOT EXISTS visits (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,26 +30,10 @@ db.serialize(() => {
       clinician_id INTEGER NOT NULL,
       timestamp TEXT NOT NULL,
       notes TEXT,
-      status TEXT DEFAULT 'booked', -- new column
+      status TEXT DEFAULT 'booked',
       FOREIGN KEY(patient_id) REFERENCES patients(id),
       FOREIGN KEY(clinician_id) REFERENCES clinicians(id)
     )
-  `);
-
-  // Optional: Insert sample data
-  db.run(`
-    INSERT OR IGNORE INTO patients (email, password, name) VALUES 
-      ('patient1@example.com', 'password123', 'John Doe')
-  `);
-
-  db.run(`
-    INSERT OR IGNORE INTO clinicians (clinician_id, password, name) VALUES 
-      ('clinician1', 'password123', 'Dr. Smith')
-  `);
-
-  db.run(`
-    INSERT OR IGNORE INTO visits (patient_id, clinician_id, timestamp, notes, status) VALUES
-      (1, 1, '2025-09-10 09:00', 'Initial consultation', 'booked')
   `);
 });
 
